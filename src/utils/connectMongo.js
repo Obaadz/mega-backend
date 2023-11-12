@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export default async () => {
   try {
     await mongoose.connect(process.env.DB_URI, {
-      dbName: "kallos",
+      dbName: "mega",
     });
 
     console.log("Connected successfully to the database");
