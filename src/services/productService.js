@@ -7,8 +7,8 @@ export const getProductsForShopPage = asyncHandler(async (req, res) => {
   const page = Number(req.query.page || "1");
   const search = req.query.search || "";
   const searchRegex = new RegExp(`^${search}`, "i");
-  const category = req.query.category_id
-    ? await CategoryModel.findOne({ _id: req.query.category_id })
+  const category = req.query.category_name
+    ? await CategoryModel.findOne({ name: req.query.category_name })
     : undefined;
 
   const query = {
@@ -37,7 +37,7 @@ export const getProductsForShopPage = asyncHandler(async (req, res) => {
   res.status(200).json({
     isSuccess: true,
     products,
-    totalPages: Math.ceil(totalCount / Number(process.env.PAGE_LIMIT)),
+    // totalPages: Math.ceil(totalCount / Number(process.env.PAGE_LIMIT)),
   });
 });
 
