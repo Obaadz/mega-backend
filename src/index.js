@@ -60,7 +60,7 @@ const admin = new AdminJS({
     orderResource,
     categoryResource,
     productResource,
-    paymentMethodResource,
+    // paymentMethodResource,
   ],
   componentLoader,
 });
