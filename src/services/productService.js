@@ -24,7 +24,7 @@ export const getProductsForShopPage = asyncHandler(async (req, res) => {
   const [products, totalCount] = await Promise.all([
     ProductModel.find(
       query,
-      { name: 1, price: 1, mainImage: 1, otherImages: 1, inStock: 1 },
+      { name: 1, price: 1, mainImage: 1, otherImages: 1, inStock: 1, priceBeforeDiscount: 1 },
       options
     ).lean(),
     ProductModel.countDocuments(query),
@@ -32,6 +32,9 @@ export const getProductsForShopPage = asyncHandler(async (req, res) => {
 
   products.forEach((product) => {
     product.price = product.price.toFixed(2) + " EGP";
+
+    if (product.priceBeforeDiscount)
+      product.priceBeforeDiscount = product.priceBeforeDiscount.toFixed(2) + " EGP";
   });
 
   res.status(200).json({

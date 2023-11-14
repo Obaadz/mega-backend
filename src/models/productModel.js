@@ -24,6 +24,9 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Product price is required"],
     },
+    priceBeforeDiscount: {
+      type: Number,
+    },
     inStock: {
       type: Boolean,
     },
