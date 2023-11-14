@@ -160,6 +160,7 @@ export const getProductById = asyncHandler(async (req, res) => {
     {
       name: 1,
       price: 1,
+      priceBeforeDiscount: 1,
       mainImage: 1,
       otherImages: 1,
       inStock: 1,
@@ -170,6 +171,7 @@ export const getProductById = asyncHandler(async (req, res) => {
   if (!product) throw new ApiError("Product not found", 400);
 
   product.price = product.price.toFixed(2) + " EGP";
+  product.priceBeforeDiscount = product.priceBeforeDiscount.toFixed(2) + " EGP";
 
   res.status(200).json({
     isSuccess: true,
