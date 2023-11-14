@@ -33,6 +33,10 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    isOffer: {
+      type: Boolean,
+      default: false,
+    },
     __v: {
       type: Number,
       select: false,

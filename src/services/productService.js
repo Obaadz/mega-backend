@@ -7,13 +7,15 @@ export const getProductsForShopPage = asyncHandler(async (req, res) => {
   const page = Number(req.query.page || "1");
   const search = req.query.search || "";
   const searchRegex = new RegExp(`^${search}`, "i");
-  const category = req.query.category_name
-    ? await CategoryModel.findOne({ name: req.query.category_name })
-    : undefined;
+  const category =
+    req.query.category_name && req.query.category_name !== "Offers"
+      ? await CategoryModel.findOne({ name: req.query.category_name })
+      : undefined;
 
   const query = {
     ...(search && { name: searchRegex }),
     ...(category && { category }),
+    ...(req.query.category_name === "Offers" && { isOffer: true }),
   };
 
   const options = {
