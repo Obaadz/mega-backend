@@ -51,7 +51,8 @@ export const getCart = asyncHandler(async (req, res) => {
     {
       path: "cartItems.product",
       select: {
-        image: 1,
+        mainImage: 1,
+        otherImages: 1,
         price: 1,
         name: 1,
         description: 1,
@@ -69,7 +70,7 @@ export const getCart = asyncHandler(async (req, res) => {
   const total = subTotal + parseFloat(process.env.DELIVERY_FEE);
 
   req.dbUser.cartItems.forEach((item) => {
-    item.product.price += " EGP";
+    item.product.price = item.product.price.toFixed(2) + " EGP";
   });
 
   const cart = {

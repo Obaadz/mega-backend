@@ -46,57 +46,6 @@ export const getProductsForShopPage = asyncHandler(async (req, res) => {
   });
 });
 
-export const getProductsForCart = asyncHandler(async (req, res) => {
-  let subTotal = 0,
-    total = 0;
-  const cartItems = [];
-  const productIds = req.body.cartItems?.map((item) => item.product._id) || [];
-
-  const products = await ProductModel.find(
-    {
-      _id: { $in: productIds },
-    },
-    {
-      name: 1,
-      price: 1,
-      mainImage: 1,
-      inStock: 1,
-    }
-  ).lean();
-
-  products.forEach((product) => {
-    const item = {
-      totalPrice: 0,
-      quantity: 0,
-      product: {},
-    };
-    const cartItem = req.body.cartItems.find((item) => item.product._id == product._id);
-
-    item.quantity = cartItem.quantity;
-
-    item.totalPrice = item.quantity * product.price;
-    product.price = product.price.toFixed(2) + " EGP";
-
-    subTotal += item.totalPrice;
-    total += item.totalPrice;
-    item.totalPrice = item.totalPrice.toFixed(2) + " EGP";
-
-    item.product = product;
-
-    cartItems.push(item);
-  });
-
-  subTotal = subTotal.toFixed(2) + " EGP";
-  total = total.toFixed(2) + " EGP";
-
-  res.status(200).json({
-    isSuccess: true,
-    cartItems,
-    subTotal,
-    total,
-  });
-});
-
 export const getProductsForCheckout = asyncHandler(async (req, res) => {
   let subTotal = 0,
     total = 0;
