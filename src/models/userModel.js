@@ -66,6 +66,19 @@ const userSchema = new mongoose.Schema(
         trim: true,
       },
     },
+    cartItems: {
+      type: [
+        {
+          quantity: Number,
+          product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+          },
+        },
+      ],
+      default: [],
+      _id: false,
+    },
     orders: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Order",

@@ -95,8 +95,8 @@ const orderSchema = new mongoose.Schema(
       },
     },
     paymentMethod: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PaymentMethod",
+      type: String,
+      enum: ["PaymentMethod"],
       required: [true, "Payment method is required to complete order"],
     },
     __v: {

@@ -8,6 +8,7 @@ import ApiError from "../utils/classes/apiError.js";
 import generateHashedString from "../utils/generateHashedString.js";
 import generateToken from "../utils/generateToken.js";
 import { z } from "zod";
+import objectIdSchema from "../utils/zod_schemas/objectIdSchema.js";
 import typeSchema from "../utils/zod_schemas/address/typeSchema.js";
 import governorateSchema from "../utils/zod_schemas/address/governorateSchema.js";
 import citySchema from "../utils/zod_schemas/address/citySchema.js";
@@ -17,6 +18,7 @@ import buildingSchema from "../utils/zod_schemas/address/buildingSchema.js";
 import floorSchema from "../utils/zod_schemas/address/floorSchema.js";
 import apartmentSchema from "../utils/zod_schemas/address/apartmentSchema.js";
 import directionsNotesSchema from "../utils/zod_schemas/address/directionsNotesSchema.js";
+import ProductModel from "../models/productModel.js";
 
 export const userRegister = asyncHandler(async (req, res) => {
   fullNameSchema.parse(req.body.fullName);
@@ -110,4 +112,48 @@ export const updateUser = asyncHandler(async (req, res) => {
   const token = generateToken({ userId: req.dbUser._id });
 
   res.status(201).json({ isSuccess: true, token });
+});
+
+export const updateUserCart = asyncHandler(async (req, res) => {
+  objectIdSchema.parse(req.body.productId);
+
+  if (Number(req.body.quantity) === 0) throw new ApiError("Please enter quantity correctly", 400);
+
+  const itemInCartIndex = req.dbUser.cartItems?.findIndex(
+    (item) => item.product._id.toJSON() == req.body.productId
+  );
+
+  if (Number(req.body.quantity) > 0 && itemInCartIndex !== -1) {
+    const newQuantity =
+      req.dbUser.cartItems[itemInCartIndex].quantity + parseInt(req.body.quantity);
+
+    req.dbUser.cartItems[itemInCartIndex].quantity = newQuantity;
+
+    await req.dbUser.save();
+  } else if (Number(req.body.quantity) > 0)
+    await req.dbUser.updateOne({
+      $push: {
+        cartItems: { product: req.body.productId, quantity: req.body.quantity },
+      },
+    });
+  else if (itemInCartIndex !== -1 && Number(req.body.quantity) < 0) {
+    if (
+      Math.abs(Number(req.body.quantity)) >= Number(req.dbUser.cartItems[itemInCartIndex].quantity)
+    )
+      await req.dbUser.updateOne({
+        $pull: {
+          cartItems: { product: req.body.productId },
+        },
+      });
+    else {
+      const newQuantity =
+        req.dbUser.cartItems[itemInCartIndex].quantity + Number(req.body.quantity);
+
+      req.dbUser.cartItems[itemInCartIndex].quantity = newQuantity;
+
+      await req.dbUser.save();
+    }
+  }
+
+  res.status(200).json({ isSuccess: true });
 });

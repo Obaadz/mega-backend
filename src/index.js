@@ -17,7 +17,6 @@ import categoryResource from "./resources/categoryResource.js";
 import productResource from "./resources/productResource.js";
 import userResource from "./resources/userResource.js";
 import orderResource from "./resources/orderResource.js";
-import paymentMethodResource from "./resources/paymentMethodResource.js";
 
 await connectMongo();
 const authenticate = async (email, password) => {
@@ -55,13 +54,7 @@ const admin = new AdminJS({
     logo: false,
     favicon: false,
   },
-  resources: [
-    userResource,
-    orderResource,
-    categoryResource,
-    productResource,
-    // paymentMethodResource,
-  ],
+  resources: [userResource, orderResource, categoryResource, productResource],
   componentLoader,
 });
 

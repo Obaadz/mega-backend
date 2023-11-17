@@ -44,7 +44,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     user: req.dbUser._id,
     deliveryFee: Number(process.env.DELIVERY_FEE),
     address: req.dbUser.address,
-    paymentMethod: req.body.paymentMethodId,
+    paymentMethod: req.body.paymentMethod,
   });
 
   await req.dbUser.updateOne({
@@ -75,10 +75,7 @@ export const getOrders = asyncHandler(async (req, res) => {
     options: {
       sort: { createdAt: -1 },
     },
-    populate: [
-      { path: "cartItems.product", select: { name: 1 } },
-      { path: "paymentMethod", select: { name: 1 } },
-    ],
+    populate: [{ path: "cartItems.product", select: { name: 1 } }],
   });
 
   const orders = req.dbUser.toJSON().orders;
