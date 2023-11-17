@@ -69,15 +69,17 @@ export const getCart = asyncHandler(async (req, res) => {
 
   const total = subTotal + parseFloat(process.env.DELIVERY_FEE);
 
-  req.dbUser.cartItems.forEach((item) => {
+  const items = req.dbUser.cartItems.map((item) => {
     item.product.price = item.product.price.toFixed(2) + " EGP";
+
+    return item;
   });
 
   const cart = {
     deliveryPrice: parseFloat(process.env.DELIVERY_FEE).toFixed(2) + " EGP",
     subTotal: subTotal.toFixed(2) + " EGP",
     total: total.toFixed(2) + " EGP",
-    items: req.dbUser.cartItems,
+    items,
     isUserHasFullAddress: req.dbUser.hasFullAddress,
   };
 
