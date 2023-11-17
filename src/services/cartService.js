@@ -45,3 +45,43 @@ export const updateCart = asyncHandler(async (req, res) => {
 
   res.status(200).json({ isSuccess: true });
 });
+
+export const getCart = asyncHandler(async (req, res) => {
+  await req.dbUser.populate([
+    {
+      path: "cartItems.product",
+      select: {
+        image: 1,
+        price: 1,
+        name: 1,
+        description: 1,
+        inStock: 1,
+      },
+    },
+  ]);
+
+  const subTotal = req.dbUser.cartItems.reduce((total, item) => {
+    const itemPrice = parseFloat(item.product.price) * parseInt(item.quantity);
+
+    return total + itemPrice;
+  }, 0);
+
+  const total = subTotal + parseFloat(process.env.DELIVERY_FEE);
+
+  req.dbUser.cartItems.forEach((item) => {
+    item.product.price += " EGP";
+  });
+
+  const cart = {
+    deliveryPrice: parseFloat(process.env.DELIVERY_FEE).toFixed(2) + " EGP",
+    subTotal: subTotal.toFixed(2) + " EGP",
+    total: total.toFixed(2) + " EGP",
+    items: req.dbUser.cartItems,
+    isUserHasFullAddress: req.dbUser.hasFullAddress,
+  };
+
+  res.status(200).json({
+    isSuccess: true,
+    cart,
+  });
+});
