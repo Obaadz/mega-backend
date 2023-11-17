@@ -69,7 +69,7 @@ export const getCart = asyncHandler(async (req, res) => {
 
   const total = subTotal + parseFloat(process.env.DELIVERY_FEE);
 
-  const items = req.dbUser.cartItems.map((item) => {
+  const items = req.dbUser.toJSON().cartItems.map((item) => {
     item.product.price = item.product.price.toFixed(2) + " EGP";
 
     return item;
