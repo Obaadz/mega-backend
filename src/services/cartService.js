@@ -77,6 +77,7 @@ export const getCart = asyncHandler(async (req, res) => {
 
   const cart = {
     deliveryPrice: parseFloat(process.env.DELIVERY_FEE).toFixed(2) + " EGP",
+    deliveryFee: parseFloat(process.env.DELIVERY_FEE).toFixed(2) + " EGP",
     subTotal: subTotal.toFixed(2) + " EGP",
     total: total.toFixed(2) + " EGP",
     items,
