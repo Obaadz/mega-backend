@@ -123,6 +123,9 @@ export const getProductById = asyncHandler(async (req, res) => {
 
   product.price = product.price.toFixed(2) + " EGP";
   product.priceBeforeDiscount = product.priceBeforeDiscount.toFixed(2) + " EGP";
+  product.quantity =
+    req.dbUser.cartItems.find((item) => item.product._id.toJSON() === product._id.toJSON())
+      ?.quantity || 0;
 
   res.status(200).json({
     isSuccess: true,
