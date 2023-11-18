@@ -78,22 +78,14 @@ export const updateUser = asyncHandler(async (req, res) => {
     password: passwordSchema.optional(),
     address: z
       .object({
-        type: req.dbUser.address?.type ? typeSchema.optional() : typeSchema,
-        governorate: req.dbUser.address?.governorate
-          ? governorateSchema.optional()
-          : governorateSchema,
-        city: req.dbUser.address?.city ? citySchema.optional() : citySchema,
-        district: req.dbUser.address?.district ? districtSchema.optional() : districtSchema,
-        street: req.dbUser.address?.street ? streetSchema.optional() : streetSchema,
-        building: req.dbUser.address?.building ? buildingSchema.optional() : buildingSchema,
-        floor:
-          req.dbUser.address?.floor || req.body.address?.type === "House"
-            ? floorSchema.optional()
-            : floorSchema,
-        apartment:
-          req.dbUser.address?.apartment || req.body.address?.type === "House"
-            ? apartmentSchema.optional()
-            : apartmentSchema,
+        type: typeSchema.optional(),
+        governorate: governorateSchema.optional(),
+        city: citySchema.optional(),
+        district: districtSchema.optional(),
+        street: streetSchema.optional(),
+        building: buildingSchema.optional(),
+        floor: floorSchema.optional(),
+        apartment: apartmentSchema.optional(),
         directionsNotes: directionsNotesSchema.optional(),
       })
       .optional(),
