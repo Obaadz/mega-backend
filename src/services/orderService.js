@@ -1,40 +1,25 @@
 import asyncHandler from "express-async-handler";
-import ProductModel from "../models/productModel.js";
 import OrderModel from "../models/orderModel.js";
+import ApiError from "../utils/classes/apiError.js";
 
 export const createOrder = asyncHandler(async (req, res) => {
-  let subTotal = 0,
-    total = 0;
+  if (req.dbUser.cartItems?.length < 1) throw new ApiError("There is no items in your cart", 400);
+
   const cartItems = [];
-  const productIds = req.body.cartItems.map((item) => item.product._id);
 
-  const products = await ProductModel.find(
-    {
-      _id: { $in: productIds },
-    },
-    {
-      name: 1,
-      price: 1,
-      mainImage: 1,
-      inStock: 1,
-    }
-  ).lean();
+  await req.dbUser.populate({ path: "cartItems.product" });
 
-  products.forEach((product) => {
+  req.dbUser.cartItems.forEach((cartItem) => {
     const item = {
       quantity: 0,
       product: {},
       priceWhenOrdered: 0,
     };
-    const cartItem = req.body.cartItems.find((item) => item.product._id == product._id);
 
     item.quantity = cartItem.quantity;
-    item.priceWhenOrdered = product.price;
+    item.priceWhenOrdered = cartItem.product.price;
 
-    subTotal += item.totalPrice;
-    total += item.totalPrice;
-
-    item.product = product;
+    item.product = cartItem.product;
 
     cartItems.push(item);
   });
@@ -50,6 +35,9 @@ export const createOrder = asyncHandler(async (req, res) => {
   await req.dbUser.updateOne({
     $addToSet: {
       orders: dbOrder._id,
+    },
+    $unset: {
+      cartItems: 1,
     },
   });
 

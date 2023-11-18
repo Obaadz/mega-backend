@@ -96,7 +96,6 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["PaymentMethod"],
       required: [true, "Payment method is required to complete order"],
     },
     __v: {
