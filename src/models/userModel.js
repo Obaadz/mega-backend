@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
     fullName: {
       type: String,
       required: [true, "Full name is required"],
+      trim: true,
     },
     email: {
       type: String,
@@ -20,37 +21,32 @@ const userSchema = new mongoose.Schema(
     phoneNumber: {
       type: String,
       required: [true, "Phone number is required"],
+      trim: true,
     },
     address: {
       _id: false,
       type: {
         type: String,
         enum: ["House", "Apartment"],
-        required: [false, "Please enter the full address"],
       },
       governorate: {
         type: String,
         trim: true,
-        required: [false, "Please enter the full address"],
       },
       city: {
         type: String,
         trim: true,
-        required: [false, "Please enter the full address"],
       },
       district: {
         type: String,
-        required: [false, "Please enter the full address"],
         trim: true,
       },
       street: {
         type: String,
-        required: [false, "Please enter the full address"],
         trim: true,
       },
       building: {
         type: String,
-        required: [false, "Please enter the full address"],
         trim: true,
       },
       floor: {
@@ -62,6 +58,10 @@ const userSchema = new mongoose.Schema(
         trim: true,
       },
       directionsNotes: {
+        type: String,
+        trim: true,
+      },
+      phoneNumber: {
         type: String,
         trim: true,
       },
@@ -111,12 +111,17 @@ userSchema.virtual("hasFullAddress").get(function () {
   if (
     !this.address ||
     !(
-      this.address.type &&
-      this.address.city &&
-      this.address.governorate &&
-      this.address.district &&
-      this.address.street &&
-      this.address.building
+      // this.address.type &&
+      // this.address.district &&
+      (
+        this.address.governorate &&
+        this.address.city &&
+        this.address.building &&
+        this.address.apartment &&
+        this.address.floor &&
+        this.address.street &&
+        this.address.phoneNumber
+      )
     )
   )
     return false;

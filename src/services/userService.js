@@ -87,6 +87,7 @@ export const updateUser = asyncHandler(async (req, res) => {
         floor: floorSchema.optional(),
         apartment: apartmentSchema.optional(),
         directionsNotes: directionsNotesSchema.optional(),
+        phoneNumber: phoneNumberSchema.optional(),
       })
       .optional(),
   })
