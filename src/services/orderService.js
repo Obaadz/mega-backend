@@ -140,5 +140,8 @@ export const getOrderById = asyncHandler(async (req, res) => {
   res.status(200).json({
     isSuccess: true,
     order,
+    user: {
+      fullName: req.dbUser.fullName,
+    },
   });
 });
