@@ -96,3 +96,49 @@ export const getOrders = asyncHandler(async (req, res) => {
     orders,
   });
 });
+
+export const getOrderById = asyncHandler(async (req, res) => {
+  const order = (
+    await OrderModel.findOne(
+      { _id: req.params.id },
+      {
+        code: 1,
+        createdAt: 1,
+        deliveryFee: 1,
+        status: 1,
+        address: 1,
+        cartItems: 1,
+        paymentMethod: 1,
+      },
+      {
+        populate: { path: "cartItems.product", select: { name: 1 } },
+      }
+    )
+  ).toJSON();
+
+  order.subTotal = order.subTotal.toFixed(2) + " EGP";
+  order.deliveryFee = order.deliveryFee.toFixed(2) + " EGP";
+  order.total = order.total.toFixed(2) + " EGP";
+
+  order.cartItems.forEach((item) => {
+    item.priceWithQuantityWhenOrdered = item.priceWhenOrdered * item.quantity;
+    item.priceWhenOrdered = item.priceWhenOrdered.toFixed(2) + " EGP";
+    item.priceWithQuantityWhenOrdered = item.priceWithQuantityWhenOrdered.toFixed(2) + " EGP";
+  });
+
+  order.createdAt = new Date(order.createdAt)
+    .toLocaleDateString("en-EG", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
+    .replace(/at/, "-");
+
+  res.status(200).json({
+    isSuccess: true,
+    order,
+  });
+});
