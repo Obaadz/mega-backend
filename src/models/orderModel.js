@@ -54,31 +54,25 @@ const orderSchema = new mongoose.Schema(
       type: {
         type: String,
         enum: ["House", "Apartment"],
-        required: [true, "Please enter the full address"],
       },
       governorate: {
         type: String,
         trim: true,
-        required: [true, "Please enter the full address"],
       },
       city: {
         type: String,
         trim: true,
-        required: [true, "Please enter the full address"],
       },
       district: {
         type: String,
-        required: [true, "Please enter the full address"],
         trim: true,
       },
       street: {
         type: String,
-        required: [true, "Please enter the full address"],
         trim: true,
       },
       building: {
         type: String,
-        required: [true, "Please enter the full address"],
         trim: true,
       },
       floor: {
@@ -90,6 +84,10 @@ const orderSchema = new mongoose.Schema(
         trim: true,
       },
       directionsNotes: {
+        type: String,
+        trim: true,
+      },
+      phoneNumber: {
         type: String,
         trim: true,
       },

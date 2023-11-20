@@ -46,11 +46,10 @@ export default {
       },
       "address.type": {
         isVisible: {
-          show: true,
-          edit: true,
+          show: false,
+          edit: false,
           filter: false,
           list: false,
-          show: true,
         },
       },
       "address.governorate": {
@@ -59,7 +58,6 @@ export default {
           edit: true,
           filter: true,
           list: false,
-          show: true,
         },
       },
       "address.building": {
@@ -68,7 +66,6 @@ export default {
           edit: true,
           filter: false,
           list: false,
-          show: true,
         },
       },
       "address.street": {
@@ -77,7 +74,6 @@ export default {
           edit: true,
           filter: false,
           list: false,
-          show: true,
         },
       },
       "address.floor": {
@@ -86,7 +82,6 @@ export default {
           edit: true,
           filter: false,
           list: false,
-          show: true,
         },
       },
       "address.apartment": {
@@ -95,10 +90,17 @@ export default {
           edit: true,
           filter: false,
           list: false,
-          show: true,
         },
       },
       "address.directionsNotes": {
+        isVisible: {
+          show: true,
+          edit: true,
+          filter: false,
+          list: false,
+        },
+      },
+      "address.phoneNumber": {
         isVisible: {
           show: true,
           edit: true,

@@ -19,8 +19,8 @@ export default {
       },
       "address.type": {
         isVisible: {
-          show: true,
-          edit: true,
+          show: false,
+          edit: false,
           filter: false,
           list: false,
         },
@@ -58,6 +58,14 @@ export default {
         },
       },
       "address.directionsNotes": {
+        isVisible: {
+          show: true,
+          edit: true,
+          filter: false,
+          list: false,
+        },
+      },
+      "address.phoneNumber": {
         isVisible: {
           show: true,
           edit: true,
